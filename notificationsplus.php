@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Notifications+
-Plugin URI: https://github.com/micc83/WpDevTool
+Plugin URI: https://github.com/riyadhalnur/notificationsplus
 Description: A realtime notification plugin for WordPress forked from the Wp Heartbeat Notify project.
 Version: 1.0
 Author: Riyadh Al Nur
@@ -26,7 +26,7 @@ $nplus_plugin = new NPlus_Plugin(
 
 // Start notifications
 new notifications_plus( array(
-	'context'	=>	array( 'front' ),	// This plugin is supposed to work only on the front end
+	'context'	=>	array( 'admin', 'front' ),	// This plugin is supposed to work only on the front end
 	'base_url'	=>	$nplus_plugin->uri		// Set js and css base url
 ) );
 
@@ -48,16 +48,19 @@ function notify_published_post( $post_id ) {
 
 // Hook for comments
 add_filter ( 'comment_post', 'notify_published_comment' );
-function notify_published_comment( $post_id ) {
+function notify_published_comment( $comment_id ) {
 	
-	global $nplus_plugin;
+	$comment = get_comment( $comment_id );
+
+	if( ! $comment->user_id > 0 ) {
+		return;
+	}
+
+	$comment_link = get_comment_link( $comment_id );
 	
 	notifications_plus::notify( array(
-		'title'		=>		__( 'New Article', $nplus_plugin->textdomain ),
-		'content'	=>	 	__( 'There\'s a new post, why don\'t you give a look at', $nplus_plugin->textdomain ) .
-							' <a href="' . get_permalink( $post_id ) . '">' . get_the_title( $post_id ) . '</a>',
-		'type'		=>		'update'
-	) );
-	
-	return $post_id;	
+		'title'		=>		'New Comment by ' . $comment->comment_author,
+		'content'   =>      'There\'s a new comment, why don\'t you <a href="' . $comment_link . '">give it</a> a look?',
+		'type'		=>		'info'
+	) );	
 }

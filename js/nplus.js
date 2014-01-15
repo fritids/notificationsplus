@@ -22,36 +22,25 @@ jQuery(document).ready( function($) {
 			$(object).slideUp(500);
 			
 		}, delay);
-	
 	}
 	
 	$('<div/>', { id: 'popup_container' } ).appendTo('body');
 	$('body').on('click', '.close', function () { $(this).parent().slideUp(200); });
 	
-	var blabla;
-	
-	// Bum bum
-    $(document).on( 'heartbeat-tick.my_tick', function( e, data ) {
+	var nmsg;
+
+    $(document).on( 'heartbeat-tick.nplus_tick', function( e, data ) {
         
-        // To understand better how it works just uncomment following lines and give a look at browser console
-        // send_popup('tik tak');
-		// console.log(data);
+		console.log(data);
         
         if ( !data['message'] )
         	return;
 
 		$.each( data['message'], function( index, notification ) {
-			
-			if ( index != blabla ){
-			
+			if ( index != nmsg ){
 				send_popup( notification['title'], notification['content'], notification['type'] );
-				
 			}
-			blabla = index;
-			
-		} ) ;
-        
-
+			nmsg = index;
+		});
     });
-    
 });

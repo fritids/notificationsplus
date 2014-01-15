@@ -39,7 +39,7 @@ class notifications_plus {
 			add_filter( 'heartbeat_settings', array( $this, 'change_hearbeat_rate' ) );
 		
 		if ( in_array( 'admin', $this->args['context'] ) )
-			add_action( 'admin_enqueue_scripts', array( $this, 'notification_scripts' ) );
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_notification_scripts' ) );
 			
 		if ( in_array( 'front', $this->args['context'] ) ){
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_notification_scripts' ) );
@@ -51,15 +51,15 @@ class notifications_plus {
 	/**
 	 * Enqueue scripts
 	 */
-	function enqueue_my_stuff() {
+	function enqueue_notification_scripts() {
 		
 		$dependency = array( 'heartbeat' );
 		
 		if ( $this->args['native_jquery'] ) 
 			$dependency[] = 'jquery';
 		
-		wp_enqueue_script( 'wp_hearbeat_notify_js', $this->args['base_url'] . '/js/nplus.js', $dependency, null, false );
-		wp_enqueue_style( 'wp_hearbeat_notify_css', $this->args['base_url'] . '/css/nplus.css' );
+		wp_enqueue_script( 'wp_hearbeat_notify_js', $this->args['base_url'] . 'js/nplus.js', $dependency, null, false );
+		wp_enqueue_style( 'wp_hearbeat_notify_css', $this->args['base_url'] . 'css/nplus.css' );
 	}
 	
 	/**
